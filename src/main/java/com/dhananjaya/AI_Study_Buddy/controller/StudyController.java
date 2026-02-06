@@ -15,7 +15,7 @@ public class StudyController {
     public StudyController(StudyService studyService) {
         this.studyService = studyService;
     }
-    
+
     @GetMapping("/ask")
     public String askTutor(@RequestParam String topic) {
         return studyService.explainTopic(topic);
