@@ -1,5 +1,6 @@
 package com.dhananjaya.AI_Study_Buddy.controller;
 
+import com.dhananjaya.AI_Study_Buddy.entity.QuizResponse;
 import com.dhananjaya.AI_Study_Buddy.service.StudyService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,5 +20,10 @@ public class StudyController {
     @GetMapping("/ask")
     public String askTutor(@RequestParam String topic) {
         return studyService.explainTopic(topic);
+    }
+
+    @GetMapping("/quiz")
+    public QuizResponse generateQuiz(@RequestParam String topic) {
+        return studyService.getQuiz(topic);
     }
 }

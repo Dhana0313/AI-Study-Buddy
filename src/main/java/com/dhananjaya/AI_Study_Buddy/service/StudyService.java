@@ -1,5 +1,6 @@
 package com.dhananjaya.AI_Study_Buddy.service;
 
+import com.dhananjaya.AI_Study_Buddy.entity.QuizResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
@@ -25,5 +26,13 @@ public class StudyService {
                 .user("Please explain the concept of: " + topic)
                 .call()
                 .content();
+    }
+
+    public QuizResponse getQuiz(String topic) {
+        return chatClient.prompt()
+                .user("Generate a strictly single multiple-choice question about: " + topic +
+                        ". The audience is an intern-level developer.")
+                .call()
+                .entity(QuizResponse.class);
     }
 }
