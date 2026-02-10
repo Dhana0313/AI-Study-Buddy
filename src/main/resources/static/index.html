@@ -6,170 +6,60 @@
     <title>AI Study Buddy</title>
     <style>
         /* --- Layout & Colors --- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; height: 100vh; margin: 0; }
+        .chat-container { width: 450px; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; height: 90vh; margin-top: 5vh; }
+        .chat-header { background: linear-gradient(135deg, #6200ea, #3700b3); color: white; padding: 20px; text-align: center; font-size: 1.4rem; font-weight: bold; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #f9f9f9; }
 
-        .chat-container {
-            width: 450px;
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 90vh;
-            margin-top: 5vh;
-        }
+        /* --- Messages --- */
+        .message { padding: 12px 18px; border-radius: 18px; max-width: 80%; line-height: 1.5; font-size: 0.95rem; word-wrap: break-word; }
+        .user-message { background-color: #6200ea; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .bot-message { background-color: #ffffff; color: #333; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #e0e0e0; }
 
-        /* --- Header --- */
-        .chat-header {
-            background: linear-gradient(135deg, #6200ea, #3700b3);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.4rem;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* --- Chat Area --- */
-        .chat-box {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background-color: #f9f9f9;
-        }
-
-        /* --- Bubbles --- */
-        .message {
-            padding: 12px 18px;
-            border-radius: 18px;
-            max-width: 80%;
-            line-height: 1.5;
-            font-size: 0.95rem;
-            position: relative;
-            word-wrap: break-word;
-        }
-
-        .user-message {
-            background-color: #6200ea;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .bot-message {
-            background-color: #ffffff;
-            color: #333;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        /* --- Quiz Specific Styles --- */
-        .quiz-container {
-            background-color: #fff8e1; /* Light yellow background */
-            border: 1px solid #ffe082;
-        }
-
-        .quiz-option {
-            margin: 8px 0;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-        .quiz-option:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        .quiz-option label {
-            cursor: pointer;
-            margin-left: 8px;
-        }
+        /* --- Quiz --- */
+        .quiz-container { background-color: #fff8e1; border: 1px solid #ffe082; }
+        .quiz-option { margin: 8px 0; padding: 8px; border-radius: 8px; cursor: pointer; }
+        .quiz-option:hover { background-color: rgba(0,0,0,0.05); }
 
         /* --- Input Area --- */
-        .input-area {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .input-area { padding: 20px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: center; }
+        input[type="text"] { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 25px; outline: none; transition: border-color 0.3s; }
+        input[type="text"]:focus { border-color: #6200ea; }
 
-        input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        input:focus {
-            border-color: #6200ea;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.1s, opacity 0.2s;
-        }
+        button { padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; transition: transform 0.1s; color: white; }
         button:active { transform: scale(0.95); }
+        .btn-ask { background-color: #6200ea; }
+        .btn-quiz { background-color: #ff9800; }
 
-        .btn-ask {
-            background-color: #6200ea;
-            color: white;
-        }
-        .btn-quiz {
-            background-color: #ff9800; /* Orange for Quiz */
-            color: white;
-        }
+        /* --- Upload Button --- */
+        .file-upload-label { cursor: pointer; padding: 10px; border-radius: 50%; background-color: #eee; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .file-upload-label:hover { background-color: #ddd; }
 
-        /* --- Utilities --- */
-        .typing {
-            font-style: italic;
-            color: #888;
-            font-size: 0.8rem;
-            padding: 0 20px;
-            margin-bottom: 10px;
-            display: none;
-        }
+        .typing { font-style: italic; color: #888; font-size: 0.8rem; padding: 0 20px; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
-    <div class="chat-header">
-        🎓 AI Study Buddy
-    </div>
-
+    <div class="chat-header">🎓 AI Study Buddy</div>
     <div class="chat-box" id="chat-box">
         <div class="message bot-message">
-            Hello! I'm your personal AI Tutor. <br>
-            Ask me a topic or click <b>"Pop Quiz"</b> to test your knowledge!
+            Hello! I'm your AI Tutor.<br>
+            📎 <b>Upload a PDF</b> to chat with your notes, or just ask me a question!
         </div>
     </div>
-
     <div class="typing" id="typing-indicator">Typing...</div>
 
     <div class="input-area">
-        <input type="text" id="user-input" placeholder="Type a topic (e.g., Java Streams)..." onkeypress="handleEnter(event)">
+        <input type="file" id="pdf-upload" accept=".pdf" style="display: none;" onchange="uploadFile()">
+
+        <label for="pdf-upload" class="file-upload-label" title="Upload PDF">
+            📎
+        </label>
+
+        <input type="text" id="user-input" placeholder="Type a topic..." onkeypress="handleEnter(event)">
         <button class="btn-ask" onclick="sendMessage()">Ask</button>
-        <button class="btn-quiz" onclick="sendQuiz()">Pop Quiz!</button>
+        <button class="btn-quiz" onclick="sendQuiz()">Quiz</button>
     </div>
 </div>
 
@@ -178,148 +68,96 @@
     const userInput = document.getElementById('user-input');
     const typingIndicator = document.getElementById('typing-indicator');
 
-    // Handle "Enter" key press
-    function handleEnter(event) {
-        if (event.key === 'Enter') sendMessage();
-    }
+    function handleEnter(event) { if (event.key === 'Enter') sendMessage(); }
 
-    // --- FUNCTION 1: Standard Chat ---
+    // --- 1. Chat ---
     async function sendMessage() {
         const text = userInput.value.trim();
         if (!text) return;
-
-        // Display user message
         addMessage(text, 'user-message');
-        userInput.value = ''; // Clear input
-        showTyping(true);
-
-        try {
-            // Call Spring Boot API
-            const response = await fetch(`/api/study/ask?topic=${encodeURIComponent(text)}`);
-            if (!response.ok) throw new Error("API Error");
-            const data = await response.text();
-
-            // Display Bot Response
-            addMessage(data, 'bot-message');
-        } catch (error) {
-            addMessage("⚠️ Error: Could not reach the study bot.", 'bot-message');
-            console.error(error);
-        } finally {
-            showTyping(false);
-        }
-    }
-
-    // --- FUNCTION 2: Quiz Mode ---
-    async function sendQuiz() {
-        const text = userInput.value.trim();
-        if (!text) {
-            alert("Please type a topic first (e.g., 'Java Interfaces') to generate a quiz!");
-            return;
-        }
-
-        // Display user request
-        addMessage(`Give me a quiz on: ${text}`, 'user-message');
         userInput.value = '';
         showTyping(true);
+        try {
+            const response = await fetch(`/api/study/ask?topic=${encodeURIComponent(text)}`);
+            const data = await response.text();
+            addMessage(data, 'bot-message');
+        } catch (error) { addMessage("Error connecting.", 'bot-message'); }
+        finally { showTyping(false); }
+    }
+
+    // --- 2. Quiz ---
+    async function sendQuiz() {
+        const text = userInput.value.trim();
+        if (!text) { alert("Type a topic first!"); return; }
+        addMessage("Give me a quiz on: " + text, 'user-message');
+        userInput.value = '';
+        showTyping(true);
+        try {
+            const response = await fetch(`/api/study/quiz?topic=${encodeURIComponent(text)}`);
+            const quiz = await response.json();
+            renderQuiz(quiz);
+        } catch (error) { addMessage("Error generating quiz.", 'bot-message'); }
+        finally { showTyping(false); }
+    }
+
+    // --- 3. Upload PDF (NEW!) ---
+    async function uploadFile() {
+        const fileInput = document.getElementById('pdf-upload');
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        addMessage(`📄 Uploading: ${file.name}...`, 'user-message');
+        showTyping(true);
+
+        const formData = new FormData();
+        formData.append("file", file);
 
         try {
-            // Call Spring Boot Quiz API
-            const response = await fetch(`/api/study/quiz?topic=${encodeURIComponent(text)}`);
-            if (!response.ok) throw new Error("API Error");
-
-            const quiz = await response.json(); // EXPECTING JSON HERE
-            renderQuiz(quiz); // Custom render function
+            const response = await fetch('/api/ingest', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text(); // The backend returns a plain String message
+            addMessage(result, 'bot-message'); // Show "Success!" or "Error"
         } catch (error) {
-            addMessage("⚠️ Error generating quiz. Please try again.", 'bot-message');
-            console.error(error);
+            addMessage("❌ Upload Failed: " + error, 'bot-message');
         } finally {
             showTyping(false);
+            fileInput.value = ""; // Reset input
         }
     }
 
-    // --- Helper: Render the Quiz JSON nicely ---
+    // --- Helpers ---
     function renderQuiz(quiz) {
         const div = document.createElement('div');
         div.className = 'message bot-message quiz-container';
-
-        // Generate HTML for options
-        // We use 'onclick' to trigger the checkAnswer function immediately
-        let optionsHtml = quiz.options.map(opt =>
-            `<div class="quiz-option" onclick="selectRadio(this)">
-                <input type="radio" name="quiz-${Date.now()}" value="${opt}" onclick="checkAnswer(this, '${quiz.correctAnswer}')">
-                <label>${opt}</label>
-             </div>`
-        ).join('');
-
-        div.innerHTML = `
-            <strong>❓ Quiz Time:</strong><br>
-            <div style="margin-top:5px; margin-bottom:10px;">${quiz.question}</div>
-            ${optionsHtml}
-            <div class="result-msg" style="margin-top:10px; font-weight:bold;"></div>
-        `;
-
+        let options = quiz.options.map(opt =>
+            `<div class="quiz-option" onclick="checkAnswer(this, '${quiz.correctAnswer}')">
+                <label>⚪ ${opt}</label>
+             </div>`).join('');
+        div.innerHTML = `<strong>❓ Quiz:</strong><br>${quiz.question}${options}<div class="result-msg"></div>`;
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // --- Helper: Helper to make the whole row clickable ---
-    window.selectRadio = function(div) {
-        const radio = div.querySelector('input[type="radio"]');
-        radio.click();
-    }
-
-    // --- Helper: Check logic (Fixed for AI Mismatches) ---
-    window.checkAnswer = function(radio, correct) {
-        const resultDiv = radio.closest('.message').querySelector('.result-msg');
-
-        // Normalize strings to avoid whitespace issues
-        const userValue = radio.value.trim();
-        const correctValue = correct.trim();
-
-        console.log("User chose:", userValue);   // Check Console (F12) to see these
-        console.log("Correct Answer:", correctValue);
-
-        // LOGIC 1: Exact Match (e.g. "Polymorphism" == "Polymorphism")
-        let isCorrect = (userValue === correctValue);
-
-        // LOGIC 2: Letter Match (e.g. Correct="B", User="B. Definition...")
-        // If the correct answer is short (like "A" or "B"), check if the user's option starts with it.
-        if (!isCorrect && correctValue.length <= 3) {
-            if (userValue.startsWith(correctValue + ".") || userValue.startsWith(correctValue + ")") || userValue.startsWith(correctValue + " ")) {
-                isCorrect = true;
-            }
-        }
-
-        // LOGIC 3: Reverse Match (e.g. Correct="B. Definition", User="B")
-        if (!isCorrect && userValue.length <= 3) {
-            if (correctValue.startsWith(userValue + ".") || correctValue.startsWith(userValue + ")")) {
-                isCorrect = true;
-            }
-        }
-
-        if (isCorrect) {
-            resultDiv.innerText = "✅ Correct! Great job.";
-            resultDiv.style.color = "#2e7d32"; // Green
+    window.checkAnswer = function(div, correct) {
+        const text = div.innerText.replace('⚪ ', '').trim();
+        const resultDiv = div.parentElement.querySelector('.result-msg');
+        if (text === correct || text.startsWith(correct)) { // Loose matching
+            resultDiv.innerHTML = "<br><span style='color:green'>✅ Correct!</span>";
         } else {
-            // Show them the right answer so they learn!
-            resultDiv.innerText = `❌ Incorrect. The correct answer was: ${correctValue}`;
-            resultDiv.style.color = "#c62828"; // Red
+            resultDiv.innerHTML = `<br><span style='color:red'>❌ Wrong. Answer: ${correct}</span>`;
         }
     }
 
-    // --- Utility Functions ---
     function addMessage(text, className) {
         const div = document.createElement('div');
         div.className = `message ${className}`;
-        // Allow simple line breaks in text responses
         div.innerHTML = text.replace(/\n/g, '<br>');
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
-
-    function showTyping(show) {
-        typingIndicator.style.display = show ? 'block' : 'none';
-    }
+    function showTyping(show) { typingIndicator.style.display = show ? 'block' : 'none'; }
 </script>
 
 </body>
