@@ -6,7 +6,9 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # 2. Run Stage
-FROM eclipse-temurin:21-jdk-alpine
+# CHANGED: We removed "-alpine" to use the standard Ubuntu-based image
+# This ensures all the AI native libraries (glibc) are present.
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
