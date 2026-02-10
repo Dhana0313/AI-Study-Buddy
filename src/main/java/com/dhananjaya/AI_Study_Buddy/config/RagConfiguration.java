@@ -20,7 +20,7 @@ public class RagConfiguration {
 
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(embeddingModel).build();
 
-        File vectorStoreFile = new File("src/main/resources/vectorstore.json");
+        File vectorStoreFile = new File("vectorstore.json");
 
         if (vectorStoreFile.exists()) {
             simpleVectorStore.load(vectorStoreFile);

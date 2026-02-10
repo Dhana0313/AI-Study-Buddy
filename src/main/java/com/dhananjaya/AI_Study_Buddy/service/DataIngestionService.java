@@ -31,7 +31,7 @@ public class DataIngestionService {
         vectorStore.accept(documents);
 
         if (vectorStore instanceof SimpleVectorStore simpleStore) {
-            simpleStore.save(new File("src/main/resources/vectorstore.json"));
+            simpleStore.save(new File("vectorstore.json"));
         }
 
         log.info("DONE: Document stored in Vector Database!");
