@@ -2,11 +2,13 @@
 
 > An intelligent, full-stack study assistant that uses **Retrieval Augmented Generation (RAG)** to turn your static PDF notes into an interactive chat experience.
 
+**[🔴 Live Demo: Try it here!](http://your-chosen-name.duckdns.org)** *(Replace this link with your actual DuckDNS URL)*
+
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.2-green)
 ![Spring AI](https://img.shields.io/badge/Spring_AI-1.0.0_M5-blue)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
-![Railway](https://img.shields.io/badge/Deployed_on-Railway-white)
+![AWS](https://img.shields.io/badge/Deployed_on-AWS_EC2-FF9900?logo=amazonaws&logoColor=white)
 
 ---
 
@@ -19,8 +21,6 @@ It uses a **RAG (Retrieval Augmented Generation)** pipeline to:
 2.  **Chunk & Embed** the text into vector representations.
 3.  **Store** embeddings in a local Vector Database.
 4.  **Retrieve** relevant context to answer user queries accurately.
-
-
 
 ---
 
@@ -40,8 +40,8 @@ It uses a **RAG (Retrieval Augmented Generation)** pipeline to:
 * Instant feedback on your answers.
 
 ### 🚀 **Production Ready**
-* **Dockerized:** Fully containerized for easy deployment.
-* **Cloud Hosted:** Deployed and running on **Railway**.
+* **Dockerized:** Fully containerized for easy environment management.
+* **Cloud Hosted:** Deployed on an **AWS EC2 (Ubuntu)** server with a custom **DuckDNS** domain.
 
 ---
 
@@ -59,8 +59,23 @@ It uses a **RAG (Retrieval Augmented Generation)** pipeline to:
 * **JavaScript (Vanilla)** (Fetch API for streaming responses & file uploads)
 
 ### **Infrastructure**
+* **Amazon Web Services (AWS EC2)** (Cloud Server)
 * **Docker** (Containerization)
-* **Railway** (Cloud Platform)
+* **DuckDNS** (Dynamic DNS Routing)
 * **Maven** (Build Tool)
 
-    E -- Response --> A
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph LR
+    A[User Frontend] -->|Upload PDF| B[Ingestion Controller]
+    B -->|Parse & Split| C[Data Ingestion Service]
+    C -->|Create Embeddings| D[(Vector Store)]
+    
+    A -->|Ask Question| E[Study Controller]
+    E -->|Retrieve Context| D
+    E -->|Prompt + Context| F[LLM Groq or OpenAI]
+    F -->|Answer| E
+    E -->|Response| A
