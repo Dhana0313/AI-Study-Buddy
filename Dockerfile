@@ -8,6 +8,10 @@ RUN mvn clean package -DskipTests
 # 2. Run Stage
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
+
+# ---> THE FIX: Install C++ math libraries required by PyTorch & Spring AI <---
+RUN apt-get update && apt-get install -y libgomp1 ca-certificates
+
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
