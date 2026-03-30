@@ -5,16 +5,15 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# 2. Run Stage
-FROM eclipse-temurin:21-jdk
+# 2. Run Stage (Explicitly using Jammy for stable apt-get servers)
+FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
-# ---> THE FIX: Install C++ math libraries required by PyTorch & Spring AI <---
+# Install C++ math libraries required by PyTorch & Spring AI
 RUN apt-get update && apt-get install -y libgomp1 ca-certificates
 
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
-# CHANGED: Added "-Xmx400m" to allow Java to use up to 400MB of RAM for the Heap.
-# This fits within a 512MB container while leaving room for the OS.
+# Restrict RAM usage to prevent OOM kills
 ENTRYPOINT ["java", "-Xmx400m", "-jar", "app.jar"]
